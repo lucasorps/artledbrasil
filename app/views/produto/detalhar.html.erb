@@ -1,0 +1,55 @@
+
+	
+	
+	<section>
+		<div class="container">
+			<div class="row">
+
+				
+				<div class="col-sm-9 padding-right">
+					<div class="product-details"><!--product-details-->
+						<div class="col-sm-5">
+							<div class="view-product">
+								<%= image_tag(@registro.imagem.url) %>
+							</div>
+							
+
+						</div>
+						<div class="col-sm-7">
+							<div class="product-information"><!--/product-information-->
+								
+								
+								
+								<h2><%= @registro.nome%></h2>
+								<p>Código: <%= @registro.id%></p>
+								<span>
+									<span>R$ <%= number_with_precision(@registro.preco_unitario, precision: 2)%></span>
+									<label>Quantidade:</label>
+									<input type="text" value="3" />
+									
+									<%=link_to 'Comprar', {:controller => 'pedido', :action => 'incluirprodutocarrinho', :id => @registro.id}, class: 'btn btn-fefault cart' %>
+									
+								</span>
+								<p><b>Quantidade:</b> 3</p>
+								<p><b>Categoria:</b> <%= Produto::CATEGORIAS.select{ |n, p| p == @registro.categoria}.first.first %></p>
+								<p><b>Facho:</b> <%= @registro.facho%></p>								 
+								<p><b>Lente:</b> <%= @registro.lente%></p>
+								<p><b>Garantia:</b> <%= @registro.garantia%></p>
+								<p><b>Potencia:</b> <%= @registro.potencia%></p>
+								<p><b>Base:</b> <%= @registro.base%></p>								
+								<p><b>Fluxo Luminoso:</b> <%= @registro.fluxo_luminoso%></p>
+								<p><b>Dimensoes:</b> <%= @registro.dimensoes%></p>
+								<p><b>Durabilidade:</b> <%= @registro.durabilidade%></p>
+								<p><b>Temperatura da Cor:</b> <%= @registro.temperatura_cor%></p>								
+								<p><b>Descricao:</b> <%= @registro.descricao%></p>
+								
+								
+							</div><!--/product-information-->
+						</div>
+					</div><!--/product-details-->
+					
+				</div>
+		</div>
+	</section>
+	
+	

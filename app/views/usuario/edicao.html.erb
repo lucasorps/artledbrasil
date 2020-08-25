@@ -1,0 +1,159 @@
+<script>
+
+
+$(document).ready(
+		function(){
+
+$("#painelalterarsenha").dialog( 
+{ autoOpen : false, modal : true } );
+
+
+
+
+
+
+
+
+$(".botao").button();
+
+$("#alterarSenha").click(
+				function(){
+						$("#painelalterarsenha").dialog("open");
+						});		
+});	
+</script>
+<script>
+
+$("#alterarSenha").click(
+				function(){
+
+
+var senhaantiga = $('[name=senhaantiga]').val();
+var novasenha= $('[name=novasennha]').val();
+var novasenharepetir= $('[name=novasennharepetir]').val();
+
+
+
+
+$.ajax( { 
+							type : "POST",
+							url : "/usuario/alterarsenha",
+							data : {'senhaantiga': senhaantiga 
+							'novasenha': novasenha 
+							'novasenharepetir': novasenharepetir 
+							
+							},
+
+		});
+	});
+</script>
+<div id="contact-page" class="container">
+    		<div class="row">  	
+	    		<div class="col-sm-12">
+	    			<div class="contact-form">
+	    				<h2 class="title text-center">Edição de Cliente</h2>
+	    				<div class="status alert alert-success" style="display: none"></div>
+				    	<%= form_for(@registro, :url => { :action => :atualizarusuario }, :html => { :multipart => true }) do |f| %>
+				    	<form id="main-contact-form" class="contact-form row" name="contact-form" method="post">
+				       	<p>
+							<span class='flash-notice'><%= flash[:notice] %></span>
+						</p>
+				            <%= hidden_field_tag :id, @registro.id %>  
+					            
+				            <div class="form-group col-md-6">
+								<p> Nome</p>
+								<%= f.text_field :nome, class: 'form-control' %>      
+				            </div>
+				            <div class="form-group col-md-6">
+								<p> Sexo</p> 								
+								<label class="checkbox-inline">
+								<%= f.radio_button :sexo, "F", class: 'form-control' %> Feminino</label>
+								<label class="checkbox-inline">
+								<%= f.radio_button :sexo, "M", class: 'form-control' %> Masculino</label>
+							</div>
+				            <div class="form-group col-md-4">
+				                <p> CPF</p>
+				                <%= f.text_field :cpf, class: 'form-control', id: 'cpf' %>
+				            </div>
+							<div class="form-group col-md-4">
+				                <p> RG</p>
+				                <%= f.text_field :rg, class: 'form-control', id: 'rg' %>
+							</div>
+							<div class="form-group col-md-4">
+				                <p> E-Mail</p>
+				                <%= f.text_field :email, class: 'form-control' %>
+							</div>
+							<div class="form-group col-md-8">
+				                <p> Endereco Residencial</p>
+				                <%= f.text_field :logradouro, class: 'form-control' %>
+							</div>
+							<div class="form-group col-md-4">
+				                <p> CEP</p>
+				                <%= f.text_field :cep, class: 'form-control' %>
+							</div>
+							<div class="form-group col-md-3">
+				                <p> Numero</p>
+				                <%= f.text_field :numero, class: 'form-control' %>
+							</div>
+							<div class="form-group col-md-3">
+				                <p> Complemento</p>
+				                <%= f.text_field :complemento, class: 'form-control' %>
+							</div>
+							<div class="form-group col-md-3">
+				                <p> UF</p>
+								<%= f.select :uf, Usuario::UF, {:prompt => "Selecione"}, { class: 'form-control'}%>
+							</div>
+							<div class="form-group col-md-3">
+				                <p> Municipio</p>
+				                <%= f.text_field :municipio, class: 'form-control' %>
+							</div>
+							<div class="form-group col-md-6">
+				                <p> Telefone Residencial</p>
+				                 <%= f.text_field :telefone_residencial, class: 'form-control', id: 'telefone_residencial' %>
+							</div>
+							<div class="form-group col-md-6">
+				                <p> Telefone Celular</p>
+				                 <%= f.text_field :telefone_celular, class: 'form-control', id: 'telefone_celular' %>
+							</div>   
+							<div class="form-group col-md-6">
+				              <a id='alterarSenha'>Alterar Senha</a>
+							</div>                        
+				            <div class="form-group col-md-12">
+				                 <%= submit_tag "Atualizar Cadastro", class: 'btn btn-primary pull-right' %>
+				                <input type="submit" name="reset" class="btn btn-primary pull-right" value="Cancelar">
+				            </div>
+ 						<% end %>
+ 	
+	    			</div>
+	    		</div>
+	    		    			
+	    	</div>  
+    	
+    </div>
+    
+					
+<div id="painelalterarsenha" title="Altere sua senha">
+		
+	<%= form_tag :action => "alterarsenha" do  %>	
+	
+	
+	<%= hidden_field_tag 'id', @registro.id %>  
+	
+	Informe a atual senha: <br/>
+	<%= password_field_tag 'senhaantiga' %>
+	<br/><br/>
+	
+	Informe a nova senha: <br/>
+	<%= password_field_tag 'novasenha'%>
+	<br/><br/>
+		
+	Repita a nova senha: <br/>
+	<%= password_field_tag 'novasenharepetir' %>
+	<br/><br/>
+	
+	<%= submit_tag "Alterar Senha", id: 'alterarSenha', class: 'botao' %>
+	
+	<% end %>
+	
+	
+</div>

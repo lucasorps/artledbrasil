@@ -1,0 +1,10 @@
+<li>
+
+
+<p>Seja bem-vindo</p>
+<div class='caixa_logado'>
+<p><%= session["NOME_USUARIO"].to_s %></p>
+</div>
+<li><%= link_to "<i class='fa fa-lock'></i> Log Out".html_safe, {:controller => 'login', :action => 'logout'} %></li>
+</li>
+
