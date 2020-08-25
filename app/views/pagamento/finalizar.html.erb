@@ -1,0 +1,131 @@
+<script>
+
+
+$(document).ready(function(){
+			
+	$('#forma_pagamento').change(function(){
+		
+		var valorCampo = $('#forma_pagamento').val();  
+		
+		if (valorCampo == 'B'){
+			$('#painelboleto').show();
+		}
+		if (valorCampo == 'B'){
+			$('#painelcartao').show();
+		}
+		
+	});
+});
+</script>
+
+<div id="contact-page" class="container">
+	
+	
+	
+    		<div class="row">  	
+	    		<div class="col-sm-12">
+	    			<div class="contact-form">
+	    				<h2 class="title text-center">Finalizar Pedido</h2>
+	    				<p>
+							<span class='flash-notice'><%= flash[:notice] %></span>
+						</p>
+	
+			<table class="table table-condensed">
+											<thead>
+												<tr class="cart_menu">
+													<td class="">Item</td>
+													<td class="">Nome</td>
+													<td class="">Quantidade</td>
+													<td class="">Preço</td>
+													<td class="">Total</td>
+													
+												</tr>
+											</thead>
+											<tbody>
+                                                <% @pedido_usuario.produtos.each do |p| %>
+												<tr>
+													<td class="">
+														<%= image_tag(p.imagem.url, size: "60x100") %> 
+													</td>
+													<td class="cart_description">
+														<h4><a href="">  <%= p.nome %> </a></h4>
+														<p>Código:   <%= p.id.to_s %> </p>
+													</td>
+													<td class="cart_quantity">
+														<div class="cart_quantity_button">
+															
+															<input class="cart_quantity_input" disabled='disabled' type="text" name="quantity" value=<%= @pedido_usuario.carrinhos.find_by_produto_id(p.id).quantidade.to_s %>  autocomplete="off" size="2">
+															
+														</div>
+													</td>
+													<td class="cart_price">
+														<p>R$  <%= "%.02f" % p.preco_unitario.to_s %>  </p>
+													</td>
+													<td class="cart_total">
+														<p class="cart_total_price">R$  <%= "%.02f" % (p.preco_unitario *  @pedido_usuario.carrinhos.find_by_produto_id(p.id).quantidade).to_s %>  </p>
+													</td>
+													
+												</tr>
+												<tr class="cart_menu">
+													<td class="image">Preço Final</td>
+													<td class="description"></td>
+													<td class="price"></td>
+													<td class="quantity"></td>
+													<td class="total"> <%= "%.02f" % @pedido_usuario.preco_total.to_s %>  </td>
+												
+												</tr>
+											<% end %>
+											
+											</tbody>
+											
+											
+											<tfoot>
+												
+											</tfoot>
+										</table>
+	    				
+	    				
+	    				<div class="status alert alert-success" style="display: none"></div>
+				    	<form id="painelboleto" class="contact-form row" name="contact-form" method="post">
+				    	<%= form_for(@pagamento, :url => { :action => :finalizarpedido }, :html => { :multipart => true }) do |f| %>
+				           
+								
+			            <div class="form-group col-md-3">
+							<p> Forma de Pagamento</p> 								
+							<%= select_tag 'forma_pagamento', Pagamento::FORMAPAGAMENTO, { class: 'form-control'}%>
+						</div>
+			        	</br>
+				                 <%= submit_tag "Imprimir Boleto", class: 'btn btn-primary' %>
+				           
+				        <% end %>
+				        </form>
+				    	<form class="contact-form row" name="contact-form" method="post" id='painelcartao'>
+				        <%= form_for(@pagamento, :url => { :action => :finalizarpedido }, :html => { :multipart => true }) do |f| %>
+				            
+							<div class="form-group col-md-4">
+				                <p> Bandeira</p>
+				               <%= f.select :bandeira, Pagamento::BANDEIRACARTAO, { class: 'form-control'} %>
+							</div>
+							<div class="form-group col-md-4">
+				                <p> Conta Corrente</p>
+				                <%= f.text_field :conta, class: 'form-control' %>
+							</div>
+							
+							<div class="form-group col-md-4">
+				                <p> Agência</p>
+				                <%= f.text_field :agencia, class: 'form-control', :maxlength => 8 %>
+							</div>
+							          
+				            <div class="form-group col-md-12">
+				                 <%= submit_tag "Finalizar Compra", class: 'btn btn-primary' %>
+				                 <div class="espacamento_botoes"></div>
+				                <input type="submit" name="reset" class="btn btn-primary " value="Cancelar">
+				            </div>
+				        <% end %>
+	    			</form>
+	    			</div>
+	    		</div>
+	    		    			
+	    	</div>  
+    	
+    </div>

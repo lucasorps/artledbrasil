@@ -1,0 +1,38 @@
+
+    
+<div class='features_items'><h2 class='title text-center'>Produtos</h2>
+              
+    
+    
+    <% for p in @produtos %>
+    
+    
+    <div class='col-sm-4'>    
+            <div class='product-image-wrapper'>
+           <div class='single-products'>  
+                  <div class='productinfo text-center'>
+                <%= image_tag(p.imagem.url, size: "60x100") %>
+                 <h2> R$    <%=   "%.02f" % p.preco_unitario %> </h2>
+                 <p> <%= link_to p.nome, {:controller => 'produto', :action => 'detalhar', :id => p.id}  %> </p>
+                  <%= link_to 'Adicionar ao Carrinho', {:controller => 'pedido', :action => 'incluirprodutocarrinho', :id => p.id, :quantidade => 1}, class: 'btn btn-default add-to-cart'  %>
+                </div>     
+ </div>
+<div class='choose'>
+    <ul class='nav nav-pills nav-justified'>
+   
+    <% if session["PERFIL_USUARIO"] == "FUN" || session["PERFIL_USUARIO"] == "ADM" %>
+     <li> <%= link_to '<i class="fa fa-plus-square"></i>Editar', {:controller => 'produto', :action => 'edicao', :id => p.id} %>    </li> 
+      <li> <%= link_to '<i class="fa fa-plus-square"></i>Excluir', {:controller => 'produto', :action => 'excluir', :id => p.id} %>  </li>
+     <% end %>
+  
+  </ul>
+     </div>
+    </div>
+    </div>
+
+    <% end %>
+
+ 	 </div>
+    </div>
+ 
+    

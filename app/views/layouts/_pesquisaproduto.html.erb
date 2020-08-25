@@ -1,0 +1,16 @@
+<script>
+$(document).ready(function(){
+			
+		$('#novo_produto').tooltip();	
+	
+} );	
+</script>
+<div class="col-sm-12">
+						<div class="divBusca" align="center">
+							<input type="text" id="produto_pesquisa" name="produto_pesquisa"  placeholder="Faça sua pesquisa. Ex.: Luninaria..." />
+							
+							<% if session["PERFIL_USUARIO"] == "FUN" || session["PERFIL_USUARIO"] == "ADM" %>
+							<%= link_to '<i class="fa fa-plus-square fa-3x"></i>'.html_safe, {:controller => "produto", :action => "cadastro"}, title: 'Cadastrar Novo Produto', id: 'novo_produto' %>
+							<% end %>
+						</div>
+					</div>

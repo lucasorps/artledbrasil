@@ -1,0 +1,25 @@
+<script>
+
+
+
+$(document).ready(function(){
+			
+			
+		$.ajax( { 
+							type : "POST",
+							url : "/application/pesquisartodosprodutos",
+							success : function(dados){
+								$("#lista_produtos").html(dados);
+							},
+							error : function(){
+								$("#lista_produtos").html("Erro ao realizar busca.");
+							}	
+						} );
+					} );	
+
+</script>
+
+
+
+
+

@@ -1,0 +1,19 @@
+<div class="mainmenu pull-left">
+							<ul class="nav navbar-nav collapse navbar-collapse">
+								<li><a href="index.html">Home</a></li>
+								<li class="dropdown"><a href="#" class="active">Menu<i class="fa fa-angle-down"></i></a>
+                                    <ul role="menu" class="sub-menu">        	
+										<% if session["PERFIL_USUARIO"] == "CLI" || session["PERFIL_USUARIO"] == "FUN" || session["PERFIL_USUARIO"] == "ADM" %>   
+											<li><%= link_to 'Editar Dados Pessoais', {:controller => 'usuario', :action => 'edicao', :id => session["ID_USUARIO"].to_s} %></li>
+											<li><%= link_to 'Consultar Pedidos', {:controller => 'pedido', :action => 'consulta'} %></li>
+										<% end %> 
+										<% if session["PERFIL_USUARIO"] == "ADM"%>   
+											<li><%= link_to 'Alterar Perfil de Acesso'.html_safe, {:controller => 'usuario', :action => 'alteracaoperfil'} %></li>
+										<% end %> 
+                                    </ul>
+                                </li> 
+							</ul>
+						</div>
+
+                                       
+

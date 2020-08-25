@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Artledbrasil</title>
+
+
+
+  <%= stylesheet_link_tag  "application", :media => "all"%>
+  <%= stylesheet_link_tag  "bootstrap.min.css"%>
+  <%= stylesheet_link_tag  "font-awesome.min.css"%>
+  <%= stylesheet_link_tag  "price-range" %>
+  <%= stylesheet_link_tag  "responsive" %>
+  <%= stylesheet_link_tag  "animate" %>
+  <%= stylesheet_link_tag  "jquery-ui", :media => "all" %>
+  
+  <%= javascript_include_tag "carrinho" %>
+  <%= javascript_include_tag "main" %>
+  <%= javascript_include_tag "jquery" %>
+  <%= javascript_include_tag "jquery.maskedinput.min.js" %>
+  <%= javascript_include_tag "price-range" %>
+  <%= javascript_include_tag "bootstrap.min.js" %>
+  <%= javascript_include_tag "jquery-ui" %>
+  
+  <%= csrf_meta_tags %>
+
+
+
+
+<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Shop | E-Shopper</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/font-awesome.min.css" rel="stylesheet">
+    <link href="css/prettyPhoto.css" rel="stylesheet">
+    <link href="css/price-range.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+	<link href="css/main.css" rel="stylesheet">
+	<link href="css/responsive.css" rel="stylesheet">
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <script src="js/respond.min.js"></script>
+    <![endif]-->       
+    <link rel="shortcut icon" href="images/ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="images/ico/apple-touch-icon-57-precomposed.png">
+</head>
+<body>
+
+<script>
+
+
+
+$(document).ready(function(){
+			
+			
+$("#rg").mask('99.999.999-9');
+$("#cpf").mask('999.999.999-99');
+$("#telefone_residencial").mask('(99) 9999-9999');
+$("#telefone_celular").mask('(99) 99999-9999');			
+$("#preco_unitario").mask('9999,99');
+			
+$("#carrinho_modal").hide();
+
+})
+</script>
+<script>
+
+
+$(document).ready(function(){
+	$("#produto_pesquisa").keyup(function(){
+	
+	var produto = $("#produto_pesquisa").val();
+
+		$.ajax( { 
+							type : "POST",
+							url : "/application/retornapesquisa",
+							data : {'produto': produto },
+							success : function(dados){
+								$("#lista_produtos").html(dados);
+							},
+							error : function(){
+								$("#lista_produtos").html("Erro ao realizar busca.");
+							}	
+						} );
+						
+					}
+								
+			);
+			
+	
+	
+	
+
+						
+		
+
+$("#carrinho").click(function(){
+
+$.ajax( { 
+							type : "POST",
+							url : "/pedido/exibircarrinho",
+							success : function(dados){
+							$("#carrinho_modal").html(dados);
+							},
+							error : function(){
+								$("#carrinho_modal").html("Erro ao realizar busca.");
+							}	
+						} );
+						
+			
+					$("#carrinho_modal").fadeIn("slow");				
+				});
+			
+
+
+		
+
+
+
+});
+			
+
+</script>
+
+<script>
+$(document.body).on('click', '.cart_quantity_up' ,function(){
+
+	var campo = $(this).parent(".cart_quantity_button").find(".cart_quantity_input").val();
+	
+	$(this).parent(".cart_quantity_button").find(".cart_quantity_input").val(parseInt(campo)+parseInt(1));
+	
+	var quantidadenova = $(this).parent(".cart_quantity_button").find(".cart_quantity_input").val();
+	
+	var codigoproduto = $(this).parent(".cart_quantity_button").parent(".cart_quantity").parent(".item").find(".cart_description").find(".codigo_produto").text();
+
+	var elemento = $(this).parent(".cart_quantity_button").parent(".cart_quantity").parent(".item").find(".cart_item_total").find(".cart_item_total_price")
+
+
+	$.ajax( { 
+							type : "POST",
+							url : "/pedido/atualizarquantidade",
+							data : {'quantidade': quantidadenova, 'codigo': codigoproduto },
+							success : function(dados){
+								$(".cart_total").html(dados)
+							},
+							error : function(){
+								$("#carrinho_modal").html("Erro ao realizar busca.");
+							}	
+						} );
+						
+
+	$.ajax( { 
+							type : "POST",
+							url : "/pedido/atualizartotalprodutopedido",
+							elemento: elemento,
+							data : {'quantidade': quantidadenova, 'codigo': codigoproduto },
+							success : function(dados){
+								elemento.html(dados);
+							},
+							error : function(){
+								$("#carrinho_modal").html("Erro ao realizar busca.");
+							}	
+						} );
+			
+					$("#carrinho_modal").fadeIn("slow");				
+				
+
+
+
+});
+
+
+$(document.body).on('click', '.cart_quantity_down' ,function(){
+	
+	var campo = $(this).parent(".cart_quantity_button").find(".cart_quantity_input").val();
+	
+	$(this).parent(".cart_quantity_button").find(".cart_quantity_input").val(parseInt(campo)-parseInt(1));
+	
+	var quantidadenova = $(this).parent(".cart_quantity_button").find(".cart_quantity_input").val();
+	
+	var codigoproduto = $(this).parent(".cart_quantity_button").parent(".cart_quantity").parent(".item").find(".cart_description").find(".codigo_produto").text();
+
+	var elemento = $(this).parent(".cart_quantity_button").parent(".cart_quantity").parent(".item").find(".cart_item_total").find(".cart_item_total_price")
+
+	$.ajax( { 
+							type : "POST",
+							url : "/pedido/atualizarquantidade",
+							data : {'quantidade': quantidadenova, 'codigo': codigoproduto },
+							success : function(dados){
+								$(".cart_total").html(dados)
+							},
+							error : function(){
+								$("#carrinho_modal").html("Erro ao realizar busca.");
+							}	
+						} );
+						
+
+	$.ajax( { 
+							type : "POST",
+							url : "/pedido/atualizartotalprodutopedido",
+							elemento: elemento,
+							data : {'quantidade': quantidadenova, 'codigo': codigoproduto },
+							success : function(dados){
+								elemento.html(dados);
+							},
+							error : function(){
+								$("#carrinho_modal").html("Erro ao realizar busca.");
+							}	
+						} );
+			
+					$(this).parent(".cart_quantity_button").parent(".cart_quantity").parent(".item").find(".cart_item_total").find(".cart_item_total_price").html(e)
+							
+			
+					$("#carrinho_modal").show();				
+				
+
+
+
+});
+</script>
+
+
+
+<header id="header"><!--header-->
+		<div class="header_top"><!--header_top-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-6 ">
+						<div class="contactinfo">
+							<ul class="nav nav-pills">
+								<li><a href=""><%=fa_icon "phone"%></a></li>
+								<li><a href=""><%=fa_icon "envelope"%></a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-sm-6">
+						<div class="social-icons pull-right">
+							<ul class="nav navbar-nav">
+								<li><a href=""><%=fa_icon "facebook"%></a></li>
+								<li><a href=""><%=fa_icon "twitter"%></a></li>
+								<li><a href=""><%=fa_icon "linkedin"%></a></li>
+								<li><a href=""><%=fa_icon "dribbble"%></a></li>
+								<li><a href=""><%=fa_icon "google-plus"%></a></li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div><!--/header_top-->
+		
+		<div class="header-middle"><!--header-middle-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="logo pull-left">
+							<%= image_tag "logo.png" %>
+						<div class="btn-group pull-right">
+							<div class="btn-group">
+								
+							</div>
+							
+							<div class="btn-group">
+								
+							</div>
+						</div>
+					</div>
+					<div class="col-sm-8">
+						<div class="shop-menu pull-left">
+							<ul class="nav navbar-nav">
+								<li><a id="carrinho" href='#'><i class="fa fa-shopping-cart"></i> Carrinho</a></li>
+							
+								<% if session["ID_USUARIO"].nil? %>   
+								<li><%= link_to '<i class="fa fa-lock"></i> Login'.html_safe, {:controller => 'login', :action => 'login'} %></li>
+								<% else %> 
+								<%= render 'layouts/barralogado' %>  
+								<% end %> 						
+							
+							</ul>
+						</div>
+					</div>
+				<section id="cart_items">
+						<div class="row">
+							<div class="col-sm-12">				
+								<div id="carrinho_modal">							
+									
+								</div>
+							</div>					
+						</div>
+					
+			
+				</section>
+				
+				</div>
+				</div>
+			</div>
+		</div><!--/header-middle-->
+	
+		<div class="header-bottom"><!--header-bottom-->
+			<div class="container">
+				<div class="row">
+					<div class="col-sm-9">
+						<div class="navbar-header">
+							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+								<span class="sr-only">Toggle navigation</span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+						</div>
+						<% if !session["ID_USUARIO"].nil? %>
+					 	<%= render 'layouts/barramenu' unless @desabilitar_menuacoes%>
+						<% end %>
+					</div>
+					<div class="col-sm-3">
+						
+					</div>
+				</div>
+				</div>
+			</div>
+	</header>
+	
+
+
+	<section id="cart_items" class="container">
+						<div class="row" >
+							<div class="col-sm-9">				
+								<div id="carrinho_modal">							
+									<div class="table-responsive cart_info">
+										 <div id='carrinho_info'>
+											
+										 </div>
+					   
+									</div>
+								</div>
+							</div>					
+						</div>
+		
+	</section>	
+
+<%= render 'layouts/pesquisaproduto' unless @desabilitar_pesquisa%>
+		
+	<section id="lista">
+	
+		<div id="contact-page" class="container">
+    		<div class="container">  	
+    		<div class="row">  	
+	    		<div class="col-sm-12">
+
+						 
+						 <div id='lista_produtos'>
+						
+						</div>
+					</div>
+				</div>
+			</div>	
+		</div>
+</section>
+
+	
+					
+			
+	
+
+<%= yield %>
+
+
+	
+		
+	<footer id="footer"><!--Footer-->
+		
+	</footer><!--/Footer-->
+	
+
+  
+    <script src="js/jquery.js"></script>
+	<script src="js/price-range.js"></script>
+    <script src="js/jquery.scrollUp.min.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.prettyPhoto.js"></script>
+    <script src="js/main.js"></script>
+</body>
+
+
+
+</html>
+
+
+
+
